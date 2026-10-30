@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">مشتاق جرافكس</string>
+    <string name="studio_full_title">Moshtaq Grafx AI Studio</string>
+    <string name="studio_subtitle">استوديو مشتاق جرافكس الذكي للتصميم والموك أب</string>
+    <string name="tab_workspace">الاستوديو والموك أب</string>
+    <string name="tab_products">تحسين المنتجات</string>
+    <string name="tab_backgrounds">الخلفيات الإعلانية</string>
+    <string name="tab_intelligence">الذكاء والتحليل</string>
+    <string name="tab_history">سجل الأعمال</string>
+    <string name="upload_design">رفع صورة التصميم الأصلي</string>
+    <string name="capture_camera">التقاط بالكاميرا</string>
+    <string name="sample_design">تحميل نموذج تصميم تجريبي</string>
+    <string name="mode_strict_preservation">المحافظة القصوى على الأصل</string>
+    <string name="mode_ai_enhancement">التحسين بالذكاء الاصطناعي</string>
+    <string name="warning_ai_pixel_modification">تنبيه: التعديل المباشر بالذكاء الاصطناعي قد لا يضمن تطابق النصوص والشعارات بنسبة 100%. لحماية النصوص بدقة مطلقة، استخدم وضع المحافظة القصوى على الأصل أو تفعيل طبقة الملصق المحمي.</string>
+    <string name="export_png">تصدير PNG عالي الجودة</string>
+    <string name="export_jpeg">تصدير JPEG مضغوط</string>
+    <string name="compare_before_after">مقارنة قبل وبعد</string>
+</resources>

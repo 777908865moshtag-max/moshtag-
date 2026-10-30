@@ -1,0 +1,122 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global default-deny safety net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Hardened primitive helpers
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // Standalone validation blueprint for StudioCloudProject
+    function isValidStudioCloudProject(data, pathUserId) {
+      return data.userId is string &&
+             data.userId == request.auth.uid &&
+             data.userId == pathUserId &&
+             data.title is string && data.title.size() >= 1 && data.title.size() <= 200 &&
+             data.categoryTitleAr is string && data.categoryTitleAr.size() >= 1 && data.categoryTitleAr.size() <= 200 &&
+             data.processingModeAr is string && data.processingModeAr.size() >= 1 && data.processingModeAr.size() <= 200 &&
+             data.aspectRatioLabel is string && data.aspectRatioLabel.size() >= 1 && data.aspectRatioLabel.size() <= 40 &&
+             data.resolutionLabel is string && data.resolutionLabel.size() >= 1 && data.resolutionLabel.size() <= 40 &&
+             data.outputWidth is int && data.outputWidth >= 1 && data.outputWidth <= 16384 &&
+             data.outputHeight is int && data.outputHeight >= 1 && data.outputHeight <= 16384 &&
+             data.exportFormat is string && (data.exportFormat == 'PNG' || data.exportFormat == 'JPEG') &&
+             data.savedFilePath is string && data.savedFilePath.size() >= 1 && data.savedFilePath.size() <= 1024 &&
+             data.originalFileName is string && data.originalFileName.size() >= 1 && data.originalFileName.size() <= 500 &&
+             (!('notesAr' in data) || data.notesAr == null || (data.notesAr is string && data.notesAr.size() <= 2000)) &&
+             data.createdAt is timestamp && data.createdAt <= request.time &&
+             data.updatedAt is timestamp && data.updatedAt <= request.time;
+    }
+
+    match /users/{userId}/projects/{projectId} {
+      allow get: if isSignedIn() &&
+                    isValidId(userId) &&
+                    isValidId(projectId) &&
+                    request.auth.uid == userId;
+
+      allow list: if isSignedIn() &&
+                     request.auth.uid == userId &&
+                     existing().userId == request.auth.uid;
+
+      allow create: if isSignedIn() &&
+                       isValidId(userId) &&
+                       isValidId(projectId) &&
+                       request.auth.uid == userId &&
+                       incoming().keys().hasAll([
+                         'userId',
+                         'title',
+                         'categoryTitleAr',
+                         'processingModeAr',
+                         'aspectRatioLabel',
+                         'resolutionLabel',
+                         'outputWidth',
+                         'outputHeight',
+                         'exportFormat',
+                         'savedFilePath',
+                         'originalFileName',
+                         'createdAt',
+                         'updatedAt'
+                       ]) &&
+                       incoming().keys().hasOnly([
+                         'userId',
+                         'title',
+                         'categoryTitleAr',
+                         'processingModeAr',
+                         'aspectRatioLabel',
+                         'resolutionLabel',
+                         'outputWidth',
+                         'outputHeight',
+                         'exportFormat',
+                         'savedFilePath',
+                         'originalFileName',
+                         'notesAr',
+                         'createdAt',
+                         'updatedAt'
+                       ]) &&
+                       isValidStudioCloudProject(incoming(), userId);
+
+      allow update: if isSignedIn() &&
+                       isValidId(userId) &&
+                       isValidId(projectId) &&
+                       request.auth.uid == userId &&
+                       isValidStudioCloudProject(incoming(), userId) &&
+                       incoming().userId == existing().userId &&
+                       incoming().createdAt == existing().createdAt &&
+                       incoming().diff(existing()).affectedKeys().hasOnly([
+                         'title',
+                         'categoryTitleAr',
+                         'processingModeAr',
+                         'aspectRatioLabel',
+                         'resolutionLabel',
+                         'outputWidth',
+                         'outputHeight',
+                         'exportFormat',
+                         'savedFilePath',
+                         'originalFileName',
+                         'notesAr',
+                         'updatedAt'
+                       ]);
+
+      allow delete: if isSignedIn() &&
+                       isValidId(userId) &&
+                       isValidId(projectId) &&
+                       request.auth.uid == userId;
+    }
+  }
+}

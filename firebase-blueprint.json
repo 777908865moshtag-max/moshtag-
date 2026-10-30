@@ -1,0 +1,92 @@
+{
+  "entities": {
+    "StudioCloudProject": {
+      "title": "StudioCloudProject",
+      "description": "Represents a saved Moshtaq Grafx AI Studio mockup or commercial design project synced to Firestore for a specific authenticated designer.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "The UID of the authenticated Google user who owns this studio project."
+        },
+        "title": {
+          "type": "string",
+          "description": "Project title or mockup category title in Arabic."
+        },
+        "categoryTitleAr": {
+          "type": "string",
+          "description": "Arabic name of the selected mockup or design category."
+        },
+        "processingModeAr": {
+          "type": "string",
+          "description": "Arabic label of the identity preservation or AI enhancement processing mode."
+        },
+        "aspectRatioLabel": {
+          "type": "string",
+          "description": "Aspect ratio label such as 1:1, 9:16, 16:9."
+        },
+        "resolutionLabel": {
+          "type": "string",
+          "description": "Resolution preset label such as 1K, 2K, 4K."
+        },
+        "outputWidth": {
+          "type": "integer",
+          "description": "Exported image width in pixels."
+        },
+        "outputHeight": {
+          "type": "integer",
+          "description": "Exported image height in pixels."
+        },
+        "exportFormat": {
+          "type": "string",
+          "description": "Export file format (PNG or JPEG)."
+        },
+        "savedFilePath": {
+          "type": "string",
+          "description": "Local file path of the exported high-resolution asset on the device."
+        },
+        "originalFileName": {
+          "type": "string",
+          "description": "Original uploaded design filename."
+        },
+        "notesAr": {
+          "type": "string",
+          "description": "Optional designer notes or AI analysis summary in Arabic."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation timestamp populated via FieldValue.serverTimestamp()."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last update timestamp populated via FieldValue.serverTimestamp()."
+        }
+      },
+      "required": [
+        "userId",
+        "title",
+        "categoryTitleAr",
+        "processingModeAr",
+        "aspectRatioLabel",
+        "resolutionLabel",
+        "outputWidth",
+        "outputHeight",
+        "exportFormat",
+        "savedFilePath",
+        "originalFileName",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}/projects/{projectId}": {
+      "schema": {
+        "$ref": "#/entities/StudioCloudProject"
+      },
+      "description": "Per-user subcollection storing Moshtaq Grafx AI Studio project records isolated by authenticated userId."
+    }
+  }
+}

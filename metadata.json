@@ -1,0 +1,6 @@
+{
+  "name": "مشتاق جرافكس",
+  "description": "استوديو مشتاق جرافكس الذكي للتصميم الجرافيكي والموك أب الاحترافي وتحسين عرض المنتجات مع المحافظة الكاملة على الهوية الأصلية.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
